@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct TextFieldAlert {
-    public struct TextField {
+    public final class TextField: Identifiable {
         let text: Binding<String>
         let placeholder: String?
         let isSecureTextEntry: Bool
@@ -26,7 +26,7 @@ public struct TextFieldAlert {
         }
     }
     
-    public struct Action {
+    public final class Action: Identifiable {
         let title: String?
         let style: UIAlertAction.Style
         let isEnabled: Binding<Bool>
