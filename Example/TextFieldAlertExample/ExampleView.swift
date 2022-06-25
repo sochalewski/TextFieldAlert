@@ -47,7 +47,7 @@ struct ExampleView: View {
                 ),
                 .init(
                     title: "OK",
-                    isEnabled: viewModel.$isValid,
+                    isEnabled: $viewModel.isValid,
                     closure: { _ in
                         viewModel.signIn()
                     }
