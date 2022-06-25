@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct TextFieldAlert {
     public struct TextField {
-        @Binding var text: String
+        let text: Binding<String>
         let placeholder: String?
         let isSecureTextEntry: Bool
         let autocapitalizationType: UITextAutocapitalizationType
@@ -17,7 +17,7 @@ public struct TextFieldAlert {
             autocorrectionType: UITextAutocorrectionType = .default,
             keyboardType: UIKeyboardType = .default
         ) {
-            self._text = text
+            self.text = text
             self.placeholder = placeholder
             self.isSecureTextEntry = isSecureTextEntry
             self.autocapitalizationType = autocapitalizationType
@@ -29,13 +29,13 @@ public struct TextFieldAlert {
     public struct Action {
         let title: String?
         let style: UIAlertAction.Style
-        let isEnabled: Published<Bool>.Publisher?
-        var closure: (([String]) -> Void)?
+        let isEnabled: Binding<Bool>
+        let closure: (([String]) -> Void)?
         
         public init(
             title: String?,
             style: UIAlertAction.Style = .default,
-            isEnabled: Published<Bool>.Publisher? = nil,
+            isEnabled: Binding<Bool> = .constant(true),
             closure: (([String]) -> Void)? = nil
         ) {
             self.title = title
@@ -97,5 +97,11 @@ extension TextFieldAlert: UIViewControllerRepresentable {
     public func updateUIViewController(
         _ uiViewController: UIViewControllerType,
         context: UIViewControllerRepresentableContext<TextFieldAlert>
-    ) { }
+    ) {
+        guard let alertController = uiViewController.presentedViewController as? UIAlertController else { return }
+        
+        alertController.actions.enumerated().forEach { offset, action in
+            action.isEnabled = actions[offset].isEnabled.wrappedValue
+        }
+    }
 }

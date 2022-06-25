@@ -34,8 +34,8 @@ public final class TextFieldAlertViewController: UIViewController {
         alert.textFields.forEach { textField in
             alertController.addTextField { [weak self] in
                 guard let self = self else { return }
-                $0.text = textField.text
-                $0.textPublisher.assign(to: \.text, on: textField).store(in: &self.cancellables)
+                $0.text = textField.text.wrappedValue
+                $0.textPublisher.assign(to: \.text.wrappedValue, on: textField).store(in: &self.cancellables)
                 $0.placeholder = textField.placeholder
                 $0.isSecureTextEntry = textField.isSecureTextEntry
                 $0.autocapitalizationType = textField.autocapitalizationType
@@ -45,7 +45,7 @@ public final class TextFieldAlertViewController: UIViewController {
         }
         
         alert.actions.forEach { action in
-            let alertAction = CancellableAlertAction(
+            let alertAction = UIAlertAction(
                 title: action.title,
                 style: action.style,
                 handler: { [weak self, weak alertController] _ in
@@ -53,16 +53,10 @@ public final class TextFieldAlertViewController: UIViewController {
                     action.closure?(alertController?.textFields?.map { $0.text ?? "" } ?? [])
                 }
             )
+            alertAction.isEnabled = action.isEnabled.wrappedValue
             alertController.addAction(alertAction)
-            
-            guard let isEnabled = action.isEnabled else { return }
-            alertAction.cancellable = isEnabled.assign(to: \.isEnabled, on: alertAction)
         }
         
         present(alertController, animated: true)
     }
-}
-
-final class CancellableAlertAction: UIAlertAction {
-    var cancellable: AnyCancellable?
 }
