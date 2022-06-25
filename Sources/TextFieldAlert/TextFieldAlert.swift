@@ -3,7 +3,7 @@ import SwiftUI
 /// A model that describes a control that displays an alert with text fields.
 public struct TextFieldAlert {
     /// A model that describes a control that displays an editable text interface.
-    public struct TextField {
+    public final class TextField: Identifiable {
         let text: Binding<String>
         let placeholder: String?
         let isSecureTextEntry: Bool
@@ -37,7 +37,7 @@ public struct TextFieldAlert {
     }
     
     /// A model that describes an action that can be taken when the user taps a button in an alert.
-    public struct Action {
+    public final class Action: Identifiable {
         let title: String
         let style: UIAlertAction.Style
         let isEnabled: Binding<Bool>
