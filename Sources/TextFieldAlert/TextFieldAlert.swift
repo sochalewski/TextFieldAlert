@@ -6,6 +6,7 @@ public struct TextFieldAlert {
         let placeholder: String?
         let isSecureTextEntry: Bool
         let autocapitalizationType: UITextAutocapitalizationType
+        let autocorrectionType: UITextAutocorrectionType
         let keyboardType: UIKeyboardType
         
         public init(
@@ -13,12 +14,14 @@ public struct TextFieldAlert {
             placeholder: String? = nil,
             isSecureTextEntry: Bool = false,
             autocapitalizationType: UITextAutocapitalizationType = .sentences,
+            autocorrectionType: UITextAutocorrectionType = .default,
             keyboardType: UIKeyboardType = .default
         ) {
             self._text = text
             self.placeholder = placeholder
             self.isSecureTextEntry = isSecureTextEntry
             self.autocapitalizationType = autocapitalizationType
+            self.autocorrectionType = autocorrectionType
             self.keyboardType = keyboardType
         }
     }

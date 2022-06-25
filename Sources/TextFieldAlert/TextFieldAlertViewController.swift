@@ -39,6 +39,7 @@ public final class TextFieldAlertViewController: UIViewController {
                 $0.placeholder = textField.placeholder
                 $0.isSecureTextEntry = textField.isSecureTextEntry
                 $0.autocapitalizationType = textField.autocapitalizationType
+                $0.autocorrectionType = textField.autocorrectionType
                 $0.keyboardType = textField.keyboardType
             }
         }
