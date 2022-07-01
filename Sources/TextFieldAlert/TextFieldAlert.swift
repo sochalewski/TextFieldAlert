@@ -27,13 +27,13 @@ public struct TextFieldAlert {
     }
     
     public struct Action {
-        let title: String?
+        let title: String
         let style: UIAlertAction.Style
         let isEnabled: Binding<Bool>
         let closure: (([String]) -> Void)?
         
         public init(
-            title: String?,
+            title: String,
             style: UIAlertAction.Style = .default,
             isEnabled: Binding<Bool> = .constant(true),
             closure: (([String]) -> Void)? = nil
