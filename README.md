@@ -1,11 +1,11 @@
 # TextFieldAlert
 
-A SwiftUI alert with text field(s) for iOS 13 and greater.
+A SwiftUI alert with text field(s) for iOS 13+ and tvOS 13+.
 
 As Apple is [going to introduce](https://sarunw.com/posts/swiftui-alert-textfield/) text field(s) as an alert actions in iOS 16, this is a good replacement for older versions.
 
 ## Requirements
-* iOS 13.0+
+* iOS 13.0+ or tvOS 13.0+
 * Swift 5.1+
 
 ## Installation
