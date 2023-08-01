@@ -16,4 +16,4 @@ jobs:
     - name: Build Package
       run: xcrun xcodebuild build -scheme 'TextFieldAlert' -destination 'generic/platform=ios'
     - name: Build Example
-      run: xcrun xcodebuild build -project 'Example/TextFieldAlertExample.xcodeproj' -scheme 'TextFieldAlertExample' -destination 'platform=iOS Simulator,name=iPhone 8'
+      run: xcrun xcodebuild build -project 'Example/TextFieldAlertExample.xcodeproj' -scheme 'TextFieldAlertExample' -destination 'generic/platform=iOS Simulator'
