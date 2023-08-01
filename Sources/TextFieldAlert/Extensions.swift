@@ -19,7 +19,7 @@ public extension View {
         isPresented: Binding<Bool>,
         alwaysPreferUIKit: Bool = false
     ) -> some View {
-        if #available(iOS 17, *), !alwaysPreferUIKit {
+        if #available(iOS 17, tvOS 100000, *), !alwaysPreferUIKit {
             alert(
                 title ?? "",
                 isPresented: isPresented,
@@ -66,7 +66,7 @@ public extension View {
 }
 
 extension UIAlertAction.Style {
-    @available(iOS 15.0, *)
+    @available(iOS 15, tvOS 15, *)
     var role: ButtonRole? {
         switch self {
         case .cancel:
