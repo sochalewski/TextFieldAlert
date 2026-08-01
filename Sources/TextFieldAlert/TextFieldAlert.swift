@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// A model that describes a control that displays an alert with text fields.
+/// A model that configures an alert with text fields and actions.
 public struct TextFieldAlert {
-    /// A model that describes a control that displays an editable text interface.
+    /// A model that configures a text field displayed in a `TextFieldAlert`.
     public final class TextField: Identifiable {
         let text: Binding<String>
         let placeholder: String?
@@ -11,14 +11,14 @@ public struct TextFieldAlert {
         let autocorrectionType: UITextAutocorrectionType
         let keyboardType: UIKeyboardType
         
-        /// Creates a model that describes a control that displays an editable text interface.
+        /// Creates a model that configures a text field displayed in a `TextFieldAlert`.
         /// - Parameters:
-        ///   - text: The text to display and edit.
-        ///   - placeholder: The string that displays when there is no other text in the text field.
-        ///   - isSecureTextEntry: A Boolean value that indicates whether a text object disables copying, and in some cases, prevents recording/broadcasting and also hides the text.
-        ///   - autocapitalizationType: The autocapitalization style for the text object.
-        ///   - autocorrectionType: The autocorrection style for the text object.
-        ///   - keyboardType: The keyboard type for the text object.
+        ///   - text: A binding to the text displayed and edited by the text field.
+        ///   - placeholder: The placeholder text displayed when the text field is empty.
+        ///   - isSecureTextEntry: A Boolean value that determines whether the text field obscures the entered text.
+        ///   - autocapitalizationType: The autocapitalization behavior for the text field.
+        ///   - autocorrectionType: The autocorrection behavior for the text field.
+        ///   - keyboardType: The keyboard type to display while editing the text field.
         public init(
             text: Binding<String> = .constant(""),
             placeholder: String? = nil,
@@ -36,23 +36,23 @@ public struct TextFieldAlert {
         }
     }
     
-    /// A model that describes an action that can be taken when the user taps a button in an alert.
+    /// A model that configures an action button displayed in a `TextFieldAlert`.
     public final class Action: Identifiable {
         let title: String
         let style: UIAlertAction.Style
-        let isEnabled: Binding<Bool>
+        let isEnabled: Bool
         let closure: (([String]) -> Void)?
         
-        /// Creates a model that describes an action that can be taken when the user taps a button in an alert.
+        /// Creates a model that configures an action button displayed in a `TextFieldAlert`.
         /// - Parameters:
-        ///   - title: The text to use for the button title.
-        ///   - style: Additional styling information to apply to the button.
-        ///   - isEnabled: A binding to a Boolean value indicating whether the action is currently enabled.
-        ///   - closure: A block to execute when the user selects the action. This block has no return value and takes an array of typed texts as its only parameter.
+        ///   - title: The title of the action button.
+        ///   - style: The style of the alert action button.
+        ///   - isEnabled: A Boolean value indicating whether the action is enabled.
+        ///   - closure: A closure called when the user selects the action. It receives the current text values in the same order as the text fields passed to the alert.
         public init(
             title: String,
             style: UIAlertAction.Style = .default,
-            isEnabled: Binding<Bool> = .constant(true),
+            isEnabled: Bool = true,
             closure: (([String]) -> Void)? = nil
         ) {
             self.title = title
@@ -68,12 +68,12 @@ public struct TextFieldAlert {
     let actions: [Action]
     let isPresented: Binding<Bool>?
     
-    /// Creates a model that describes a control that displays an alert with text fields.
+    /// Creates a model that configures an alert with text fields and actions.
     /// - Parameters:
-    ///   - title: The title of the alert. Use this string to get the user’s attention and communicate the reason for the alert.
-    ///   - message: Descriptive text that provides additional details about the reason for the alert.
-    ///   - textFields: The array of text fields displayed by the alert.
-    ///   - actions: The actions that the user can take in response to the alert or action sheet.
+    ///   - title: The title of the alert.
+    ///   - message: An optional message displayed below the title.
+    ///   - textFields: The text fields displayed by the alert.
+    ///   - actions: The actions available to the user in the alert.
     public init(
         title: String?,
         message: String? = nil,
@@ -124,7 +124,14 @@ extension TextFieldAlert: UIViewControllerRepresentable {
         guard let alertController = uiViewController.presentedViewController as? UIAlertController else { return }
         
         alertController.actions.enumerated().forEach { offset, action in
-            action.isEnabled = actions[offset].isEnabled.wrappedValue
+            action.isEnabled = actions[offset].isEnabled
         }
+    }
+
+    public static func dismantleUIViewController(
+        _ uiViewController: TextFieldAlertViewController,
+        coordinator: Void
+    ) {
+        uiViewController.dismissAlert()
     }
 }

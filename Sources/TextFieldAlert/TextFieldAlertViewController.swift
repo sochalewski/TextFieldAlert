@@ -2,14 +2,12 @@ import UIKit
 import SwiftUI
 import Combine
 
+/// A view controller that presents a `TextFieldAlert` using `UIAlertController`.
 public final class TextFieldAlertViewController: UIViewController {
-    
     private let alert: TextFieldAlert
     private var cancellables = Set<AnyCancellable>()
     
-    init(
-        alert: TextFieldAlert
-    ) {
+    init(alert: TextFieldAlert) {
         self.alert = alert
         super.init(nibName: nil, bundle: nil)
     }
@@ -53,10 +51,16 @@ public final class TextFieldAlertViewController: UIViewController {
                     action.closure?(alertController?.textFields?.map { $0.text ?? "" } ?? [])
                 }
             )
-            alertAction.isEnabled = action.isEnabled.wrappedValue
+            alertAction.isEnabled = action.isEnabled
             alertController.addAction(alertAction)
         }
         
         present(alertController, animated: true)
+    }
+    
+    
+    func dismissAlert() {
+        cancellables.removeAll()
+        presentedViewController?.dismiss(animated: false)
     }
 }

@@ -1,18 +1,28 @@
 import SwiftUI
 
 struct TextFieldWrapper<PresentingView: View>: View {
+    @Binding private var isPresented: Bool
+    private let presentingView: PresentingView
+    private let alert: TextFieldAlert
     
-    @Binding var isPresented: Bool
-    let presentingView: PresentingView
-    let content: () -> TextFieldAlert
+    init(
+        isPresented: Binding<Bool>,
+        presentingView: PresentingView,
+        alert: TextFieldAlert
+    ) {
+        self._isPresented = isPresented
+        self.presentingView = presentingView
+        self.alert = alert
+    }
     
     var body: some View {
-        ZStack {
-            if isPresented {
-                content().dismissible($isPresented)
-            }
-            
-            presentingView
-        }
+        presentingView
+            .background(
+                Group {
+                    if isPresented {
+                        alert.dismissible($isPresented)
+                    }
+                }
+            )
     }
 }

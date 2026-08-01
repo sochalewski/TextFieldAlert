@@ -3,14 +3,14 @@ import UIKit
 import Combine
 
 public extension View {
-    /// Presents a text field alert when a given condition is true.
+    /// Presents an alert containing text fields when `isPresented` is `true`.
     /// - Parameters:
-    ///   - title: A text string used as the title of the alert.
-    ///   - message: A text string used as the message of the alert.
-    ///   - textFields: An array of models used as text fields of the alert.
-    ///   - actions: An array of models used as actions of the alert.
-    ///   - isPresented: A binding to a Boolean value that determines whether to present the alert. When the user presses or taps one of the alert's actions, the system sets this value to `false` and dismisses.
-    ///   - alwaysPreferUIKit: A Boolean value that determines whether to always prefer an `UIAlertController`-backed view over a native alert on iOS 17 and greater.
+    ///   - title: The title of the alert.
+    ///   - message: An optional message displayed below the title.
+    ///   - textFields: The text fields displayed in the alert.
+    ///   - actions: The actions displayed in the alert.
+    ///   - isPresented: A binding to a Boolean value that controls whether the alert is presented. The binding is set to `false` when the user selects an action.
+    ///   - alwaysPreferUIKit: A Boolean value that forces the UIKit-backed implementation when `true`. By default, iOS 17 and later use the native SwiftUI implementation; earlier iOS versions and tvOS use UIKit.
     @ViewBuilder func textFieldAlert(
         title: String?,
         message: String? = nil,
@@ -30,7 +30,7 @@ public extension View {
                         } else {
                             TextField(textField.placeholder ?? "", text: textField.text)
                                 .autocapitalization(textField.autocapitalizationType)
-                                .disableAutocorrection(textField.autocorrectionType == .no)
+                                .autocorrectionDisabled(textField.autocorrectionType == .no)
                                 .keyboardType(textField.keyboardType)
                         }
                     }
@@ -41,25 +41,25 @@ public extension View {
                             role: action.style.role,
                             action: { action.closure?(textFields.map { $0.text.wrappedValue }) }
                         )
-                        .disabled(!action.isEnabled.wrappedValue)
+                        .disabled(!action.isEnabled)
                     }
                 },
                 message: {
-                    message != nil ? Text(message!) : nil
+                    if let message = message {
+                        Text(message)
+                    }
                 }
             )
         } else {
             TextFieldWrapper(
                 isPresented: isPresented,
                 presentingView: self,
-                content: {
-                    TextFieldAlert(
-                        title: title,
-                        message: message,
-                        textFields: textFields,
-                        actions: actions
-                    )
-                }
+                alert: TextFieldAlert(
+                    title: title,
+                    message: message,
+                    textFields: textFields,
+                    actions: actions
+                )
             )
         }
     }

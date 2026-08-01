@@ -2,7 +2,7 @@ import SwiftUI
 import TextFieldAlert
 
 struct ExampleView: View {
-    @StateObject var viewModel = ExampleViewModel()
+    @StateObject private var viewModel = ExampleViewModel()
     
     var body: some View {
         VStack {
@@ -47,7 +47,7 @@ struct ExampleView: View {
                 ),
                 .init(
                     title: "OK",
-                    isEnabled: $viewModel.isValid,
+                    isEnabled: viewModel.isValid,
                     closure: { _ in
                         viewModel.signIn()
                     }
